@@ -1,0 +1,84 @@
+"use client";
+
+import { useState, useCallback } from "react";
+import { usePortfolio, useTradeHistory, useSnapshots } from "@/lib/hooks";
+import PortfolioSummary from "@/components/simulation/PortfolioSummary";
+import PositionTable from "@/components/simulation/PositionTable";
+import PerformanceChart from "@/components/simulation/PerformanceChart";
+import TradeLog from "@/components/simulation/TradeLog";
+import { ExecutionResult } from "@/lib/simulation/types";
+
+export default function SimulationPage() {
+  const { portfolio, isLoading, mutate: mutatePortfolio } = usePortfolio();
+  const { data: tradesData, mutate: mutateTrades } = useTradeHistory(100);
+  const { data: snapshotsData, mutate: mutateSnapshots } = useSnapshots();
+  const [executing, setExecuting] = useState(false);
+  const [lastMessage, setLastMessage] = useState<string | null>(null);
+
+  const handleExecute = useCallback(async () => {
+    setExecuting(true);
+    setLastMessage(null);
+    try {
+      const res = await fetch("/api/simulation/execute", { method: "POST" });
+      const json = await res.json();
+      if (!res.ok) {
+        setLastMessage(json.error ?? "执行失败");
+        return;
+      }
+      const result = json.data as ExecutionResult;
+      setLastMessage(result.message);
+      mutatePortfolio();
+      mutateTrades();
+      mutateSnapshots();
+    } catch (err) {
+      setLastMessage(err instanceof Error ? err.message : "网络错误");
+    } finally {
+      setExecuting(false);
+    }
+  }, [mutatePortfolio, mutateTrades, mutateSnapshots]);
+
+  const handleReset = useCallback(async () => {
+    try {
+      await fetch("/api/simulation/reset", { method: "POST" });
+      setLastMessage("已重置为初始状态");
+      mutatePortfolio();
+      mutateTrades();
+      mutateSnapshots();
+    } catch {
+      setLastMessage("重置失败");
+    }
+  }, [mutatePortfolio, mutateTrades, mutateSnapshots]);
+
+  if (isLoading || !portfolio) {
+    return (
+      <div className="text-center py-12 text-slate-500">
+        加载组合数据中...
+      </div>
+    );
+  }
+
+  const trades = tradesData?.data ?? [];
+  const snapshots = snapshotsData?.data ?? [];
+
+  return (
+    <div className="space-y-4">
+      {lastMessage && (
+        <div className="rounded-md bg-slate-800/80 border border-slate-700/50 px-4 py-2 text-sm text-amber-300">
+          {lastMessage}
+        </div>
+      )}
+      <PortfolioSummary
+        portfolio={portfolio}
+        onExecute={handleExecute}
+        onReset={handleReset}
+        executing={executing}
+      />
+      <PositionTable
+        positions={portfolio.positions}
+        tradingDate={portfolio.tradingDate}
+      />
+      <PerformanceChart snapshots={snapshots} />
+      <TradeLog trades={trades} />
+    </div>
+  );
+}

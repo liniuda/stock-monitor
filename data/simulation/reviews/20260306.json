@@ -1,0 +1,227 @@
+{
+  "date": "20260306",
+  "createdAt": "2026-03-06T10:03:30.330Z",
+  "totalTrades": 20,
+  "realizedPnl": 0,
+  "cumulativeReturn": -0.0015918039000000573,
+  "market": {
+    "shIndex": 0.38,
+    "szIndex": 0.59,
+    "cyIndex": 0.38,
+    "marketTrend": "neutral",
+    "summary": "上证+0.38%。深证+0.59%。创业板+0.38%。市场震荡整理，短线操作难度较大"
+  },
+  "tradeReviews": [
+    {
+      "tradeId": "20260306-000516-1772763346419",
+      "stockCode": "000516",
+      "stockName": "国际医学",
+      "action": "buy",
+      "price": 5.01,
+      "shares": 9100,
+      "rating": "neutral",
+      "reason": "买入评分47分(高分)，信号较强；买入价已较昨收涨10.1%，追高风险较大"
+    },
+    {
+      "tradeId": "20260306-688177-1772763346419",
+      "stockCode": "688177",
+      "stockName": "百奥泰",
+      "action": "buy",
+      "price": 22.69,
+      "shares": 1900,
+      "rating": "neutral",
+      "reason": "买入评分45分(高分)，信号较强；买入价已较昨收涨5.5%，追高风险较大"
+    },
+    {
+      "tradeId": "20260306-688302-1772763346419",
+      "stockCode": "688302",
+      "stockName": "海创药业",
+      "action": "buy",
+      "price": 42.49,
+      "shares": 1000,
+      "rating": "good",
+      "reason": "买入评分45分(高分)，信号较强"
+    },
+    {
+      "tradeId": "20260306-002653-1772763346419",
+      "stockCode": "002653",
+      "stockName": "海思科",
+      "action": "buy",
+      "price": 46.45,
+      "shares": 900,
+      "rating": "neutral",
+      "reason": "买入评分45分(高分)，信号较强；买入价已较昨收涨5.2%，追高风险较大"
+    },
+    {
+      "tradeId": "20260306-300869-1772763346420",
+      "stockCode": "300869",
+      "stockName": "康泰医学",
+      "action": "buy",
+      "price": 14.45,
+      "shares": 3000,
+      "rating": "good",
+      "reason": "买入评分45分(高分)，信号较强"
+    },
+    {
+      "tradeId": "20260306-600825-1772763346420",
+      "stockCode": "600825",
+      "stockName": "新华传媒",
+      "action": "buy",
+      "price": 6.6,
+      "shares": 6500,
+      "rating": "neutral",
+      "reason": "买入评分44分(高分)，信号较强；买入价已较昨收涨10.0%，追高风险较大"
+    },
+    {
+      "tradeId": "20260306-603032-1772763346420",
+      "stockCode": "603032",
+      "stockName": "德新科技",
+      "action": "buy",
+      "price": 18.65,
+      "shares": 2300,
+      "rating": "neutral",
+      "reason": "买入评分44分(高分)，信号较强；买入价已较昨收涨6.1%，追高风险较大"
+    },
+    {
+      "tradeId": "20260306-603895-1772763346420",
+      "stockCode": "603895",
+      "stockName": "天永智能",
+      "action": "buy",
+      "price": 31.52,
+      "shares": 1300,
+      "rating": "neutral",
+      "reason": "买入评分44分(高分)，信号较强；买入价已较昨收涨7.2%，追高风险较大"
+    },
+    {
+      "tradeId": "20260306-002429-1772763346420",
+      "stockCode": "002429",
+      "stockName": "兆驰股份",
+      "action": "buy",
+      "price": 10.86,
+      "shares": 3900,
+      "rating": "neutral",
+      "reason": "买入评分44分(高分)，信号较强；买入价已较昨收涨6.3%，追高风险较大"
+    },
+    {
+      "tradeId": "20260306-002063-1772763346420",
+      "stockCode": "002063",
+      "stockName": "远光软件",
+      "action": "buy",
+      "price": 7.01,
+      "shares": 5400,
+      "rating": "neutral",
+      "reason": "买入评分39分(中等)，信号一般；买入价已较昨收涨10.0%，追高风险较大"
+    },
+    {
+      "tradeId": "20260306-300143-1772763346420",
+      "stockCode": "300143",
+      "stockName": "盈康生命",
+      "action": "buy",
+      "price": 12.11,
+      "shares": 3100,
+      "rating": "neutral",
+      "reason": "买入评分39分(中等)，信号一般；买入价已较昨收涨12.0%，追高风险较大"
+    },
+    {
+      "tradeId": "20260306-300238-1772763346420",
+      "stockCode": "300238",
+      "stockName": "冠昊生物",
+      "action": "buy",
+      "price": 15.72,
+      "shares": 2400,
+      "rating": "neutral",
+      "reason": "买入评分39分(中等)，信号一般；买入价已较昨收涨5.0%，追高风险较大"
+    },
+    {
+      "tradeId": "20260306-300887-1772763346420",
+      "stockCode": "300887",
+      "stockName": "谱尼测试",
+      "action": "buy",
+      "price": 11.66,
+      "shares": 3200,
+      "rating": "neutral",
+      "reason": "买入评分39分(中等)，信号一般；买入价已较昨收涨6.2%，追高风险较大"
+    },
+    {
+      "tradeId": "20260306-301090-1772763346420",
+      "stockCode": "301090",
+      "stockName": "华润材料",
+      "action": "buy",
+      "price": 7.83,
+      "shares": 4800,
+      "rating": "neutral",
+      "reason": "买入评分39分(中等)，信号一般"
+    },
+    {
+      "tradeId": "20260306-600055-1772763346420",
+      "stockCode": "600055",
+      "stockName": "万东医疗",
+      "action": "buy",
+      "price": 14.98,
+      "shares": 2400,
+      "rating": "neutral",
+      "reason": "买入评分37分(中等)，信号一般"
+    },
+    {
+      "tradeId": "20260306-600094-1772763346420",
+      "stockCode": "600094",
+      "stockName": "大名城",
+      "action": "buy",
+      "price": 4.59,
+      "shares": 7800,
+      "rating": "neutral",
+      "reason": "买入评分37分(中等)，信号一般"
+    },
+    {
+      "tradeId": "20260306-600476-1772763346420",
+      "stockCode": "600476",
+      "stockName": "湘邮科技",
+      "action": "buy",
+      "price": 12.9,
+      "shares": 2700,
+      "rating": "neutral",
+      "reason": "买入评分37分(中等)，信号一般"
+    },
+    {
+      "tradeId": "20260306-600587-1772763346420",
+      "stockCode": "600587",
+      "stockName": "新华医疗",
+      "action": "buy",
+      "price": 15.19,
+      "shares": 2300,
+      "rating": "neutral",
+      "reason": "买入评分37分(中等)，信号一般"
+    },
+    {
+      "tradeId": "20260306-600703-1772763346420",
+      "stockCode": "600703",
+      "stockName": "三安光电",
+      "action": "buy",
+      "price": 16.77,
+      "shares": 2100,
+      "rating": "neutral",
+      "reason": "买入评分37分(中等)，信号一般"
+    },
+    {
+      "tradeId": "20260306-600834-1772763346420",
+      "stockCode": "600834",
+      "stockName": "申通地铁",
+      "action": "buy",
+      "price": 8.52,
+      "shares": 4200,
+      "rating": "neutral",
+      "reason": "买入评分37分(中等)，信号一般"
+    }
+  ],
+  "strategySummary": "持仓分散，考虑集中持仓。",
+  "optimizations": [
+    {
+      "id": "opt-concentration-1772791410330",
+      "title": "持仓过于分散",
+      "description": "当前持仓20只，持仓过分散可能稀释收益。建议将Top N阈值从20降低到10-15只，集中资金到高确信度标的。",
+      "currentValue": "Top 12 选股",
+      "suggestedValue": "Top 12 选股",
+      "confirmed": null
+    }
+  ]
+}
