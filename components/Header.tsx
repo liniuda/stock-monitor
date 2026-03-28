@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { getMarketStatus } from "@/lib/market-hours";
+import { useAuth } from "@/lib/auth/context";
 
 export default function Header() {
   const [time, setTime] = useState("");
   const [status, setStatus] = useState({ label: "", isOpen: false });
   const pathname = usePathname();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     function update() {
@@ -74,7 +76,20 @@ export default function Header() {
             })}
           </nav>
         </div>
-        <div className="font-mono text-sm text-slate-400">{time}</div>
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-sm text-slate-400">{time}</span>
+          {user && (
+            <>
+              <span className="text-xs text-slate-400">{user.username}</span>
+              <button
+                onClick={logout}
+                className="text-xs text-slate-500 hover:text-red-400 transition-colors"
+              >
+                退出
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );
