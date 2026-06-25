@@ -1,25 +1,24 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useSectorStocks, useSectors } from "@/lib/hooks";
 import { formatPercent, formatAmount } from "@/lib/format";
 import StockTable from "@/components/StockTable";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 
-export default function SectorDetailPage() {
-  const params = useParams();
-  const code = params.code as string;
+function SectorDetailContent() {
+  const searchParams = useSearchParams();
+  const code = searchParams.get("code") ?? "";
   const [page, setPage] = useState(1);
 
   const { data: sectorsData } = useSectors();
-  const { data, error, isLoading } = useSectorStocks(code, page);
+  const { data, error, isLoading } = useSectorStocks(code || null, page);
 
   const sector = sectorsData?.data?.list?.find((s) => s.code === code);
 
   const stocks = data?.data?.list ?? [];
   const total = data?.data?.total ?? 0;
-  const totalPages = Math.max(1, Math.ceil(total / 50));
   const hasMore = stocks.length === 50;
 
   function getColor(value: number): string {
@@ -129,5 +128,13 @@ export default function SectorDetailPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function SectorDetailPage() {
+  return (
+    <Suspense fallback={<div className="text-center py-12 text-slate-500">加载中...</div>}>
+      <SectorDetailContent />
+    </Suspense>
   );
 }

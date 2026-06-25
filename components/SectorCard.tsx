@@ -30,7 +30,7 @@ export default function SectorCard({ sector }: { sector: Sector }) {
   const tags = deriveSectorTags(sector);
 
   return (
-    <Link href={`/sectors/${sector.code}`}>
+    <Link href={`/sectors/?code=${sector.code}`}>
       <div
         className={`group cursor-pointer rounded-xl border p-4 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg ${cardBg}`}
       >

@@ -6,24 +6,45 @@ import { ScanStatus, IntradayResult } from "./recommend/types";
 import { Portfolio, TradeRecord, DailySnapshot } from "./simulation/types";
 import { isMarketOpen } from "./market-hours";
 import { useCallback } from "react";
+import {
+  fetchMarketIndicesClient,
+  fetchSectorsClient,
+  fetchSectorStocksClient,
+} from "./client-fetch";
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+// Static JSON data (bundled at build time for GitHub Pages)
+import staticPortfolio from "../data/simulation/portfolio.json";
+import staticTrades from "../data/simulation/trades.json";
+import staticConfig from "../data/simulation/config.json";
+
+// ============ Market Data (client-side JSONP) ============
 
 export function useMarketData() {
   const open = isMarketOpen();
-  return useSWR<ApiResponse<MarketIndex[]>>("/api/market", fetcher, {
-    refreshInterval: open ? 5000 : 0,
-    refreshWhenHidden: false,
-    revalidateOnFocus: true,
-    dedupingInterval: 3000,
-  });
+  const { data, error, isLoading, mutate } = useSWR<MarketIndex[]>(
+    "market-indices",
+    () => fetchMarketIndicesClient(),
+    {
+      refreshInterval: open ? 5000 : 0,
+      refreshWhenHidden: false,
+      revalidateOnFocus: true,
+      dedupingInterval: 3000,
+    }
+  );
+
+  return {
+    data: data ? { data, timestamp: Date.now() } : null,
+    error,
+    isLoading,
+    mutate,
+  };
 }
 
 export function useSectors(type: "industry" | "concept" = "industry") {
   const open = isMarketOpen();
-  return useSWR<ApiResponse<{ list: Sector[]; total: number }>>(
-    `/api/sectors?type=${type}`,
-    fetcher,
+  const { data, error, isLoading, mutate } = useSWR<{ list: Sector[]; total: number }>(
+    `sectors-${type}`,
+    () => fetchSectorsClient(1),
     {
       refreshInterval: open ? 10000 : 0,
       refreshWhenHidden: false,
@@ -31,13 +52,20 @@ export function useSectors(type: "industry" | "concept" = "industry") {
       dedupingInterval: 5000,
     }
   );
+
+  return {
+    data: data ? { data, timestamp: Date.now() } : null,
+    error,
+    isLoading,
+    mutate,
+  };
 }
 
 export function useSectorStocks(code: string | null, page: number = 1) {
   const open = isMarketOpen();
-  return useSWR<ApiResponse<{ list: Stock[]; total: number }>>(
-    code ? `/api/sector-stocks?code=${code}&page=${page}&pageSize=50` : null,
-    fetcher,
+  const { data, error, isLoading, mutate } = useSWR<{ list: Stock[]; total: number }>(
+    code ? `sector-stocks-${code}-${page}` : null,
+    () => fetchSectorStocksClient(code!, page, 50),
     {
       refreshInterval: open ? 8000 : 0,
       refreshWhenHidden: false,
@@ -45,90 +73,80 @@ export function useSectorStocks(code: string | null, page: number = 1) {
       dedupingInterval: 4000,
     }
   );
+
+  return {
+    data: data ? { data, timestamp: Date.now() } : null,
+    error,
+    isLoading,
+    mutate,
+  };
 }
+
+// ============ Recommend (static: no server scan) ============
 
 export function useRecommendScan() {
-  const { data, error, isLoading, mutate } = useSWR<
-    ApiResponse<ScanStatus>
-  >("/api/recommend/scan", fetcher, {
-    refreshInterval: (latestData) => {
-      const status = latestData?.data?.status;
-      if (status === "scanning") return 3000;
-      return 0;
-    },
-    refreshWhenHidden: false,
-    revalidateOnFocus: false,
-    dedupingInterval: 2000,
-  });
+  const summary = null as ScanStatus | null;
 
   const startScan = useCallback(async () => {
-    await fetch("/api/recommend/scan?action=start");
-    mutate();
-  }, [mutate]);
+    // No server-side scanning in static mode
+  }, []);
 
   return {
-    summary: data?.data ?? null,
-    isLoading,
-    error,
+    summary,
+    isLoading: false,
+    error: null,
     startScan,
-    mutate,
+    mutate: () => {},
   };
 }
 
-export function useIntradayCheck(codes: string[]) {
-  const open = isMarketOpen();
-  const key =
-    codes.length > 0
-      ? `/api/recommend/intraday?codes=${codes.join(",")}`
-      : null;
-
-  return useSWR<ApiResponse<IntradayResult[]>>(
-    open ? key : null,
-    fetcher,
-    {
-      refreshInterval: open ? 30000 : 0,
-      refreshWhenHidden: false,
-      revalidateOnFocus: true,
-      dedupingInterval: 10000,
-    }
-  );
+export function useIntradayCheck(_codes: string[]) {
+  return {
+    data: null as ApiResponse<IntradayResult[]> | null,
+    error: null,
+    isLoading: false,
+  };
 }
 
-// ============ Simulation Hooks ============
+// ============ Simulation (static JSON) ============
 
 export function usePortfolio() {
-  const open = isMarketOpen();
-  const { data, error, isLoading, mutate } = useSWR<ApiResponse<Portfolio>>(
-    "/api/simulation/portfolio",
-    fetcher,
-    {
-      refreshInterval: open ? 30000 : 0,
-      refreshWhenHidden: false,
-      revalidateOnFocus: true,
-      dedupingInterval: 5000,
-    }
-  );
-
+  const portfolio = staticPortfolio as unknown as Portfolio;
   return {
-    portfolio: data?.data ?? null,
-    isLoading,
-    error,
-    mutate,
+    portfolio,
+    isLoading: false,
+    error: null,
+    mutate: () => {},
   };
 }
 
-export function useTradeHistory(limit: number = 50) {
-  return useSWR<ApiResponse<TradeRecord[]>>(
-    `/api/simulation/history?type=trades&limit=${limit}`,
-    fetcher,
-    { revalidateOnFocus: false }
-  );
+export function useTradeHistory(_limit: number = 50) {
+  const trades = (staticTrades as unknown as TradeRecord[]).slice(0, _limit);
+  return {
+    data: { data: trades, timestamp: Date.now() } as ApiResponse<TradeRecord[]>,
+    error: null,
+    isLoading: false,
+    mutate: () => {},
+  };
 }
 
 export function useSnapshots() {
-  return useSWR<ApiResponse<DailySnapshot[]>>(
-    "/api/simulation/history?type=snapshots",
-    fetcher,
-    { revalidateOnFocus: false }
-  );
+  // Static: return empty snapshots (no file system access in browser)
+  return {
+    data: { data: [] as DailySnapshot[], timestamp: Date.now() } as ApiResponse<DailySnapshot[]>,
+    error: null,
+    isLoading: false,
+    mutate: () => {},
+  };
+}
+
+// ============ Strategy Config (static JSON) ============
+
+export function useStrategyConfig() {
+  return {
+    config: staticConfig,
+    isLoading: false,
+    error: null,
+    mutate: () => {},
+  };
 }

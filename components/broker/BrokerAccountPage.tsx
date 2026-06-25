@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import useSWR from "swr";
 import type {
   BrokerAccount,
   BrokerAssets,
@@ -9,8 +8,16 @@ import type {
   TradingPermission,
 } from "@/lib/broker/types";
 import { PERMISSION_LABELS } from "@/lib/broker/types";
+import staticAccounts from "../../data/broker/accounts.json";
 
-// ---- fetcher ----
+// ---- static data (GitHub Pages: no server API) ----
+
+const staticData = (staticAccounts as unknown as AccountWithAssets[]).map((a) => ({
+  ...a,
+  password: "***",
+  connected: false,
+  assets: null,
+}));
 
 type AccountWithAssets = Omit<BrokerAccount, "password"> & {
   password: string;
@@ -18,20 +25,10 @@ type AccountWithAssets = Omit<BrokerAccount, "password"> & {
   connected?: boolean;
 };
 
-const fetcher = (url: string) =>
-  fetch(url)
-    .then((r) => r.json())
-    .then((d) => d.data as AccountWithAssets[]);
+// ---- helpers (no-ops for static deployment) ----
 
-// ---- helpers ----
-
-async function postBroker(body: Record<string, unknown>) {
-  const res = await fetch("/api/broker", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  return res.json();
+async function postBroker(_body: Record<string, unknown>) {
+  return { data: staticData };
 }
 
 const ALL_PERMISSIONS: TradingPermission[] = [
@@ -391,15 +388,11 @@ function AccountCard({
 export default function BrokerAccountPage() {
   const [showForm, setShowForm] = useState(false);
 
-  const { data: accounts, mutate } = useSWR<AccountWithAssets[]>(
-    "/api/broker?assets=1",
-    fetcher,
-    { revalidateOnFocus: false, dedupingInterval: 30_000 }
-  );
+  const [accounts, setAccounts] = useState<AccountWithAssets[] | null>(staticData);
 
   const refresh = useCallback(() => {
-    mutate();
-  }, [mutate]);
+    // No-op: static deployment
+  }, []);
 
   const list = accounts ?? [];
 

@@ -42,3 +42,6 @@ next-env.d.ts
 
 # auth data
 /data/auth/
+.vercel-tmp/
+middleware.ts.bak
+out/

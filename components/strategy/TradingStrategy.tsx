@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import useSWR from "swr";
 import {
   INDICATORS,
   DAILY_CONDITIONS,
@@ -25,9 +24,9 @@ import {
   SellSignalDoc,
 } from "@/lib/strategy/strategy-doc";
 import type { SimConfig } from "@/lib/simulation/types";
+import staticConfig from "../../data/simulation/config.json";
 
-const configFetcher = (url: string) =>
-  fetch(url).then((r) => r.json()).then((d) => d.data as SimConfig);
+const config = staticConfig as unknown as SimConfig;
 
 // ============ 可折叠容器 ============
 
@@ -231,10 +230,7 @@ function IndicatorPanel() {
 // ============ 主组件 ============
 
 export default function TradingStrategy() {
-  const { data: config } = useSWR<SimConfig>("/api/strategy/config", configFetcher, {
-    revalidateOnFocus: false,
-    dedupingInterval: 60_000,
-  });
+  // Use static config (bundled at build time for GitHub Pages)
 
   // Use dynamic config values when available, fall back to static defaults
   const capitalConfig: TradingConfigItem[] = config ? buildCapitalConfig(config) : CAPITAL_CONFIG;

@@ -17,37 +17,13 @@ export default function SimulationPage() {
 
   const handleExecute = useCallback(async () => {
     setExecuting(true);
-    setLastMessage(null);
-    try {
-      const res = await fetch("/api/simulation/execute", { method: "POST" });
-      const json = await res.json();
-      if (!res.ok) {
-        setLastMessage(json.error ?? "执行失败");
-        return;
-      }
-      const result = json.data as ExecutionResult;
-      setLastMessage(result.message);
-      mutatePortfolio();
-      mutateTrades();
-      mutateSnapshots();
-    } catch (err) {
-      setLastMessage(err instanceof Error ? err.message : "网络错误");
-    } finally {
-      setExecuting(false);
-    }
-  }, [mutatePortfolio, mutateTrades, mutateSnapshots]);
+    setLastMessage("静态部署模式：交易执行功能需要在本地运行系统");
+    setExecuting(false);
+  }, []);
 
   const handleReset = useCallback(async () => {
-    try {
-      await fetch("/api/simulation/reset", { method: "POST" });
-      setLastMessage("已重置为初始状态");
-      mutatePortfolio();
-      mutateTrades();
-      mutateSnapshots();
-    } catch {
-      setLastMessage("重置失败");
-    }
-  }, [mutatePortfolio, mutateTrades, mutateSnapshots]);
+    setLastMessage("静态部署模式：重置功能需要在本地运行系统");
+  }, []);
 
   if (isLoading || !portfolio) {
     return (
