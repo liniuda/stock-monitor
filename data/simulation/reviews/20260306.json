@@ -221,7 +221,7 @@
       "description": "当前持仓20只，持仓过分散可能稀释收益。建议将Top N阈值从20降低到10-15只，集中资金到高确信度标的。",
       "currentValue": "Top 12 选股",
       "suggestedValue": "Top 12 选股",
-      "confirmed": null
+      "confirmed": true
     }
   ]
 }
